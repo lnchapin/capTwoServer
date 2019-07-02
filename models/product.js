@@ -5,11 +5,13 @@ module.exports = (sequelize, DataTypes) => {
     description: DataTypes.TEXT,
     price: DataTypes.INTEGER,
     img_url: DataTypes.TEXT,
-    quanity: DataTypes.INTEGER,
     category_id: DataTypes.INTEGER
   }, {});
   Product.associate = function(models) {
     // associations can be defined here
+    Product.hasOne(models.ProductDetail, {
+      foreignKey: 'product_id'
+    });
     Product.belongsTo(models.Category, {
       foreignKey: 'category_id'
     });

@@ -13,13 +13,16 @@ app.use(morgan('dev'));
 const db = require('./models');
 const Category = db.Category;
 const Product = db.Product;
+const ProductDetail = db.ProductDetail;
 
 //Router files
 
 
 //Routes
 app.get('/api/categories', (req, res, next)=>{
-  Category.findAll()
+  Category.findAll({
+    include:[{ model : Product }]
+  })
     .then(categories => {
       res.json({ categories });
     })
@@ -42,7 +45,8 @@ app.get('/api/products/:id', (req, res, next)=>{
   Product.findAll({
     where:{
       category_id: req.params.id
-    }
+    },
+    include:[{ model : ProductDetail }]
   })
     .then(products => {
       res.json({ products });
