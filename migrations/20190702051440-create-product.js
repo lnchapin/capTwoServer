@@ -20,6 +20,11 @@ module.exports = {
       img_url: {
         type: Sequelize.TEXT
       },
+      quanity: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 0
+      },
       category_id: {
         type: Sequelize.INTEGER,
         references: {
