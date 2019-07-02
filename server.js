@@ -10,8 +10,9 @@ app.use(cors());
 app.use(morgan('dev'));
 
 //Sequelize Models
-const db = require('./models')
-const Category = db.Category
+const db = require('./models');
+const Category = db.Category;
+const Product = db.Product;
 
 //Router files
 
@@ -21,6 +22,30 @@ app.get('/api/categories', (req, res, next)=>{
   Category.findAll()
     .then(categories => {
       res.json({ categories });
+    })
+    .catch(error => {
+      next(error);
+    });
+});
+
+app.get('/api/products', (req, res, next)=>{
+  Product.findAll()
+    .then(products => {
+      res.json({ products });
+    })
+    .catch(error => {
+      next(error);
+    });
+});
+
+app.get('/api/products/:id', (req, res, next)=>{
+  Product.findAll({
+    where:{
+      category_id: req.params.id
+    }
+  })
+    .then(products => {
+      res.json({ products });
     })
     .catch(error => {
       next(error);
