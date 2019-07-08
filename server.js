@@ -43,6 +43,21 @@ app.get('/api/products', (req, res, next)=>{
     });
 });
 
+app.get('/api/category/:category', (req, res, next)=>{
+  Product.findAll({
+    where:{
+      name: req.params.category
+    },
+    include:[{ model : ProductDetail }]
+  })
+    .then(products => {
+      res.json({ products });
+    })
+    .catch(error => {
+      next(error);
+    });
+});
+
 app.get('/api/products/:id', (req, res, next)=>{
   Product.findAll({
     where:{
