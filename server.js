@@ -33,7 +33,7 @@ app.get('/api/categories', (req, res, next)=>{
 
 app.get('/api/products', (req, res, next)=>{
   Product.findAll({
-    include:[{model: Category}]
+    include:[{model: Category}, {model: ProductDetail}]
   })
     .then(products => {
       res.json({ products });
