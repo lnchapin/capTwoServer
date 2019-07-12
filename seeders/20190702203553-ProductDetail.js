@@ -26,7 +26,7 @@ module.exports = {
         product_id: 2
       },
       {
-        description: 'Southern Ag OMRI tested neem oil. Broad spectru fungicide/insecticde/miticide',
+        description: 'Southern Ag OMRI tested neem oil. Broad spectrum fungicide/insecticde/miticide',
         quantity: 0,
         manufacture: 'Southern Ag',
         product_id: 3
