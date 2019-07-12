@@ -43,12 +43,12 @@ app.get('/api/products', (req, res, next)=>{
     });
 });
 
-app.get('/api/category/:category', (req, res, next)=>{
-  Product.findAll({
+app.get('/api/categories/:category', (req, res, next)=>{
+  Category.findAll({
     where:{
       name: req.params.category
     },
-    include:[{ model : ProductDetail }]
+    include:[{ model : Product }]
   })
     .then(products => {
       res.json({ products });
