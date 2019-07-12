@@ -59,11 +59,8 @@ app.get('/api/category/:category', (req, res, next)=>{
 });
 
 app.get('/api/products/:id', (req, res, next)=>{
-  Product.findAll({
-    where:{
-      category_id: req.params.id
-    },
-    include:[{ model : ProductDetail }]
+  Product.findByPk(req.params.id,{
+    include:[{model: Category}, {model: ProductDetail}]
   })
     .then(products => {
       res.json({ products });
@@ -72,6 +69,13 @@ app.get('/api/products/:id', (req, res, next)=>{
       next(error);
     });
 });
+
+// Product.findOne({
+//   where:{
+//     id: req.params.id
+//   },
+//   include:[{model: Category}, {model: ProductDetail}]
+// })
 
 //Error Handling
 // // The following 2 `app.use`'s MUST follow ALL your routes/middleware right before `app.listen`
