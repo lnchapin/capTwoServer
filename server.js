@@ -90,7 +90,7 @@ app.post('/api/checkout', async (req, res, next)=>{
     });
     res.json({ session });
   } catch (error){
-    res.status(400).json({ error });
+    next(error); 
   }
 });
 
