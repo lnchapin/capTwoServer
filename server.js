@@ -83,14 +83,14 @@ app.post('/api/checkout', async (req, res, next)=>{
   }];
   try {
     const session = await stripe.checkout.sessions.create({
-      payment_methods_type: ['card'],
+      payment_method_types: ['card'],
       line_items: lineItems,
       success_url: 'http://localhost:3000/success',
       cancel_url: 'http://localhost:3000/cancel'
     });
     res.json({ session });
   } catch (error){
-    next(error); 
+    next(error);
   }
 });
 
