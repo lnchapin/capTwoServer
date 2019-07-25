@@ -3,9 +3,31 @@ const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const jwt = require('express-jwt');
+const jwksRsa = require('jwks-rsa');
+
 
 const PORT = process.env.PORT || 8080;
 const app = express();
+
+const authConfig = {
+  domain: process.env.DOMAIN,
+  audience: process.env.AUDIENCE
+};
+
+const checkJwt = jwt({
+  secret: jwksRsa.expressJwtSecret({
+    cache: true,
+    rateLimit: true,
+    jwksRequestsPerMinute: 5,
+    jwksUri: `https://${authConfig.domain}/.well-known/jwks.json`
+  }),
+
+  audience: authConfig.audience,
+  issuer: `https://${authConfig.domain}/`,
+  algorithm: ['RS256']
+});
+
 
 //Middleware
 app.use(express.urlencoded({ extended: true }));
@@ -95,6 +117,13 @@ app.post('/api/checkout', async (req, res, next)=>{
   } catch (error){
     next(error);
   }
+});
+
+// Define an endpoint that must be called with an access token
+app.get('/api/external', checkJwt, (req, res) => {
+  res.send({
+    msg: 'Your Access Token was successfully validated!'
+  });
 });
 
 //Error Handling
