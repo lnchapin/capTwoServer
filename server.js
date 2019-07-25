@@ -75,8 +75,15 @@ app.get('/api/products/:id', (req, res, next)=>{
 });
 
 app.post('/api/checkout', async (req, res, next)=>{
-  const lineItem = req.body;
-  const lineItems = [lineItem];
+  const productDetailId = req.body.productDetailId;
+  const lineItems = [{
+    name: req.body.name,
+    description: req.body.description,
+    images: req.body.images,
+    amount: req.body.amount,
+    currency: req.body.currency,
+    quantity: req.body.quantity
+  }];
   try {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
