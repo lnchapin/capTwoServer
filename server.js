@@ -1,11 +1,15 @@
+require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
-const PORT = process.env.PORT || 8080;
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
+const PORT = process.env.PORT || 8080;
 const app = express();
 
 //Middleware
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(cors());
 app.use(morgan('dev'));
 
@@ -68,6 +72,29 @@ app.get('/api/products/:id', (req, res, next)=>{
     .catch(error => {
       next(error);
     });
+});
+
+app.post('/api/checkout', async (req, res, next)=>{
+  const productDetailId = req.body.productDetailId;
+  const lineItems = [{
+    name: req.body.name,
+    description: req.body.description,
+    images: req.body.images,
+    amount: req.body.amount,
+    currency: req.body.currency,
+    quantity: req.body.quantity
+  }];
+  try {
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: lineItems,
+      success_url: 'http://localhost:3000/success',
+      cancel_url: 'http://localhost:3000/cancel'
+    });
+    res.json({ session });
+  } catch (error){
+    next(error);
+  }
 });
 
 //Error Handling
